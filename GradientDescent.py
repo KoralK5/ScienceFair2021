@@ -7,18 +7,19 @@ def change(l, i, x):
 def gradientDescent(func, args, pos, dx):
 	nArgs = args[:]
 	change(nArgs, pos, dx)
-	return (func(*nArgs) - func(*args)) / dx
+	return (func(*nArgs) - func(*args)) * dx
 
 def demo(
-	tolerance = 0.001, 
+	test,
+	tolerance = 0.001,
 	adjust = 0, 
 	rate = 0.1, 
 	dx = 0.001, 
 	x = 100
 	):
 
-	def test(x):
-		return (x)**2 + 7
+	f = open('GradientDescent.txt', 'a')
+	f.write('Gradient Descent'); f.close()
 
 	t = 0
 	while test(x) > 7 + tolerance:
@@ -28,11 +29,14 @@ def demo(
 		x -= adjust * rate
 		t += 1
 		
-		f = open('results.txt', 'a')
-		f.write(f'\n{test(x)}')
-		f.close()
-	print(f'\n\nLocal Minimum: {test(x)}')
+		f = open('GradientDescent.txt', 'a')
+		f.write(f'\n{test(x)}'); f.close()
+
+	print('\n\nGRADIENT DESCENT')
+	print(f'Local Minimum: {test(x)}')
 	print(f'Iterations: {t}')
+
+	return test(x), t
 
 if __name__ == '__main__':
 	demo()
