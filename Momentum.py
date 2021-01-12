@@ -1,7 +1,7 @@
 import GradientDescent as gd
 
-def momentum(velocity, beta, func, args, position, dx):
-	return beta * velocity + gd.gradientDescent(func, args, position, dx)
+def momentum(velocity, beta, gradient, rate):
+	return beta * velocity + gradient * rate
 
 if __name__ == '__main__':
 	def test(x):
@@ -10,10 +10,16 @@ if __name__ == '__main__':
 	velocity = 0
 	beta = 0.9
 	dx = 0.001
-	a = 10
+	a = 100
 	rate = 0.1
 
-	for t in range(100000):
+	for t in range(1000):
 		print(a, test(a), velocity)
-		velocity = momentum(velocity, beta, test, [a], [0], dx)
+
+		gradient = gd.gradientDescent(test, [a], [0], dx)
+		velocity = momentum(velocity, beta, gradient, rate)
 		a -= rate * velocity
+
+		f = open('results.txt', 'a')
+		f.write(f'\n{test(a)}')
+		f.close()
