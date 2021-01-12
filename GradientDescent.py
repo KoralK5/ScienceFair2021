@@ -1,33 +1,36 @@
-import GradientDescent as gd
+def change(l, i, x):
+	if len(i) > 1:
+		change(l[i[0]], i[1:len(i)], x)
+	else:
+		l[i[0]] += x
 
-def momentum(velocity, beta, gradient, rate):
-	return beta * velocity + gradient * rate
+def gradientDescent(func, args, pos, dx):
+	nArgs = args[:]
+	change(nArgs, pos, dx)
+	return (func(*nArgs) - func(*args)) / dx
 
 def demo(
 	tolerance = 0.001, 
-	velocity = 0, 
-	beta = 0.9, 
+	adjust = 0, 
+	rate = 0.1, 
 	dx = 0.001, 
-	x = 100, 
-	rate = 0.1
+	x = 100
 	):
-	
+
 	def test(x):
-		return x ** 2 + 7
-	
+		return (x)**2 + 7
+
 	t = 0
 	while test(x) > 7 + tolerance:
-		print(f'\nx: {x}\nf(x): {test(x)}\nvelocity: {velocity}')
+		print(f'\nx: {x}\nf(x): {test(x)}\najustment: {adjust}')
 
-		gradient = gd.gradientDescent(test, [x], [0], dx)
-		velocity = momentum(velocity, beta, gradient, rate)
-		x -= rate * velocity
+		adjust = gradientDescent(test, [x], [0], dx)
+		x -= adjust * rate
 		t += 1
-
+		
 		f = open('results.txt', 'a')
 		f.write(f'\n{test(x)}')
 		f.close()
-
 	print(f'\n\nLocal Minimum: {test(x)}')
 	print(f'Iterations: {t}')
 
