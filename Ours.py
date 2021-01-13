@@ -21,12 +21,12 @@ def demo(
 	while test(x) > vertex + tolerance or test(x) < vertex - tolerance:
 		print(f'\nx: {x}\nf(x): {test(x)}\nvelocity: {velocity}')
 
-		if abs(velocity) < 1:
-			velocity *= 0.1
-
 		gradient = gd.gradientDescent(test, [x], [0], dx)
 		velocity = momentum(velocity, beta, gradient, rate)
 		x -= beta * velocity + rate * gradient
+
+		if abs(velocity) < abs(x):
+			velocity *= 0.1
 
 		f = open('Ours.txt', 'a')
 		f.write(f'\n{test(x)}'); f.close()
