@@ -12,25 +12,25 @@ def demo(
 	vertex = 0,
 	beta = 0.9
 	):
+	
+	f = open('NADAM.txt', 'a')
+	f.write('NADAM'); f.close()
 
-	f = open('Nesterov.txt', 'a')
-	f.write('Nesterov'); f.close()
-
-	velocity = 1
+	velocity = 0
 	t = 0
 	while test(x) > vertex + tolerance or test(x) < vertex - tolerance:
 		print(f'\nx: {x}\nf(x): {test(x)}\nvelocity: {velocity}')
-		
-		gradient = gd.gradientDescent(test, [x - velocity], [0], dx)
+
+		gradient = gd.gradientDescent(test, [x], [0], dx)
 		velocity = momentum(velocity, beta, gradient, rate)
-		x -= rate * velocity
-		
-		f = open('Nesterov.txt', 'a')
+		x -= beta * velocity + rate * gradient
+
+		f = open('NADAM.txt', 'a')
 		f.write(f'\n{test(x)}'); f.close()
 
 		t += 1
 	
-	print('\n\nNESTEROV')
+	print('\n\nNADAM')
 	print(f'Local Minimum: {test(x)}')
 	print(f'Iterations: {t}')
 
