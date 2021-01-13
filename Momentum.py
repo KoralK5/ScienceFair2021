@@ -1,7 +1,7 @@
 import GradientDescent as gd
 
 def momentum(velocity, beta, gradient, rate):
-	return beta * velocity + gradient * rate
+	return (beta * velocity + gradient) * rate
 
 def demo(
 	test,
@@ -16,14 +16,14 @@ def demo(
 	f = open('Momentum.txt', 'a')
 	f.write('Momentum'); f.close()
 	
-	velocity = 1
+	velocity = 0
 	t = 0
 	while test(x) > vertex + tolerance or test(x) < vertex - tolerance:
 		print(f'\nx: {x}\nf(x): {test(x)}\nvelocity: {velocity}')
 
 		gradient = gd.gradientDescent(test, [x], [0], dx)
 		velocity = momentum(velocity, beta, gradient, rate)
-		x -= rate * velocity
+		x -= velocity
 
 		f = open('Momentum.txt', 'a')
 		f.write(f'\n{test(x)}'); f.close()
