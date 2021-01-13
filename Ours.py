@@ -6,18 +6,19 @@ def momentum(velocity, beta, gradient, rate):
 def demo(
 	test,
 	tolerance = 0.01,
-	velocity = 0, 
-	beta = 0.9, 
-	dx = 0.001, 
-	x = 100, 
-	rate = 0.1
+	x = 100,
+	dx = 0.001,
+	rate = 0.1,
+	vertex = 0,
+	beta = 0.9
 	):
 	
 	f = open('Ours.txt', 'a')
 	f.write('Ours'); f.close()
 
+	velocity = 1
 	t = 0
-	while test(x) > 0+tolerance or test(x) < 0-tolerance:
+	while test(x) > vertex + tolerance or test(x) < vertex - tolerance:
 		print(f'\nx: {x}\nf(x): {test(x)}\nvelocity: {velocity}')
 
 		if abs(velocity) < 1:
@@ -26,10 +27,11 @@ def demo(
 		gradient = gd.gradientDescent(test, [x], [0], dx)
 		velocity = momentum(velocity, beta, gradient, rate)
 		x -= beta * velocity + rate * gradient
-		t += 1
 
 		f = open('Ours.txt', 'a')
 		f.write(f'\n{test(x)}'); f.close()
+
+		t += 1
 	
 	print('\n\nOurs')
 	print(f'Local Minimum: {test(x)}')
