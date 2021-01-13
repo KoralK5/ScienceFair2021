@@ -16,7 +16,7 @@ def demo(
 	f = open('Ours.txt', 'a')
 	f.write('Ours'); f.close()
 
-	velocity = 1
+	velocity = 0
 	t = 0
 	while test(x) > vertex + tolerance or test(x) < vertex - tolerance:
 		print(f'\nx: {x}\nf(x): {test(x)}\nvelocity: {velocity}')
