@@ -1,39 +1,40 @@
 import GradientDescent as gd
-
-def momentum(velocity, beta, gradient, rate):
-	return beta * velocity + gradient * rate
+import Momentum as M
 
 def demo(
 	test,
 	tolerance = 0.01,
+	maxIter = 1000,
 	x = 100,
 	dx = 0.001,
 	rate = 0.1,
 	vertex = 0,
-	beta = 0.9
+	beta = 0.9, 
 	):
 	
-	f = open('Ours.txt', 'a')
-	f.write('Ours'); f.close()
+	f = open('Debounce.txt', 'a')
+	f.write('Debounce'); f.close()
 
-	velocity = 0
-	t = 0
-	while test(x) > vertex + tolerance or test(x) < vertex - tolerance:
+	velocity, preVelocity = 0, 1
+	for t in range(1, maxIter + 1):
 		print(f'\nx: {x}\nf(x): {test(x)}\nvelocity: {velocity}')
 
 		gradient = gd.gradientDescent(test, [x], [0], dx)
-		velocity = momentum(velocity, beta, gradient, rate)
+		velocity = M.momentum(velocity, beta, gradient, rate)
 		x -= beta * velocity + rate * gradient
-
-		if abs(velocity) < abs(x):
+		
+		if abs(preVelocity) < abs(velocity):
 			velocity *= 0.1
+		
+		preVelocity = velocity
 
-		f = open('Ours.txt', 'a')
+		f = open('Debounce.txt', 'a')
 		f.write(f'\n{test(x)}'); f.close()
-
-		t += 1
+		
+		if abs(vertex - test(x)) < tolerance:
+			break
 	
-	print('\n\nOurs')
+	print('\n\nDebounce')
 	print(f'Local Minimum: {test(x)}')
 	print(f'Iterations: {t}')
 
