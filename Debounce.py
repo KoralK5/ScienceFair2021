@@ -1,6 +1,5 @@
 import GradientDescent as gd
 import Momentum as M
-from numpy import tanh
 
 def sign(x):
 	try:
@@ -31,7 +30,7 @@ def demo(
 		gradient = gd.gradientDescent(test, [x], [0], dx)
 		velocity = M.momentum(velocity, beta, gradient, rate)
 		x -= beta * velocity + rate * gradient
-		velocity = velocity * (1 - 0.9 * (sign(abs(velocity - preVelocity)) / 2 + 0.5))
+		velocity = velocity * (0.55 - 0.45 * sign(abs(velocity - preVelocity)))
 		
 		preVelocity = velocity
 
