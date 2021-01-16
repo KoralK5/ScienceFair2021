@@ -1,12 +1,10 @@
 import GradientDescent as gd
 import Momentum as M
+from numpy import tanh
 
-def sign(x):
-	try:
-		return x / abs(x)
-		
-	except:
-		return 0
+def tanh(x):
+	e = 2.7182818284590452353602874713527
+	return (e**x - e**-x) / (e**x + e**-x)
 
 def demo(
 	test,
@@ -17,7 +15,7 @@ def demo(
 	rate = 0.1,
 	vertex = 0,
 	beta = 0.9, 
-	theta = 1
+	theta = 0.55
 	):
 	
 	f = open('Debounce.txt', 'a')
@@ -30,8 +28,7 @@ def demo(
 		gradient = gd.gradientDescent(test, [x], [0], dx)
 		velocity = M.momentum(velocity, beta, gradient, rate)
 		x -= beta * velocity + rate * gradient
-		velocity = velocity * (0.55 - 0.45 * sign(abs(velocity - preVelocity)))
-		
+		beta = theta + (1-theta) * tanh(velocity - preVelocity)
 		preVelocity = velocity
 
 		f = open('Debounce.txt', 'a')
