@@ -1,4 +1,3 @@
-
 #internal libraries
 import GradientDescent
 import Momentum
@@ -9,6 +8,12 @@ import Debounce
 #a function to compare optimizers 
 def run(params):
 	from time import time
+
+	open('GradientDescent.txt', 'r+').truncate(0)
+	open('Momentum.txt', 'r+').truncate(0)
+	open('Nesterov.txt', 'r+').truncate(0)
+	open('NADAM.txt', 'r+').truncate(0)
+	open('Debounce.txt', 'r+').truncate(0)
 
 	input('-> GRADIENT DESCENT <-')
 	start1 = time(); x1, t1 = GradientDescent.demo(*params); end1 = time()
@@ -59,16 +64,17 @@ def run(params):
 def plot(iteration, GD, MO, NE, NA, DE):
 	from matplotlib import pyplot as plt
 
-	plt.plot(iteration, GD, label = 'Gradient Descent')
-	plt.plot(iteration, MO, label = 'Momentum') 
-	plt.plot(iteration, NE, label = 'Nesterov') 
-	plt.plot(iteration, NA, label = 'NADAM') 
-	plt.plot(iteration, DE, label = 'Debounce')
+	plt.fill_between(iteration, GD, alpha=0.5, label = 'Gradient Descent')
+	plt.fill_between(iteration, MO, alpha=0.5, label = 'Momentum') 
+	plt.fill_between(iteration, NE, alpha=0.5, label = 'Nesterov') 
+	plt.fill_between(iteration, NA, alpha=0.5, label = 'NADAM') 
+	plt.fill_between(iteration, DE, alpha=0.5, label = 'Debounce')
 
 	plt.title('NN Optimizer Comparison')
 	plt.xlabel('Iteration')
 	plt.ylabel('Error')
 	
+	plt.legend()
 	plt.show()
 
 #a function limited to one variable
@@ -85,7 +91,8 @@ theta = 0.55 #a hyperparameter for Debounce
 tolerance = 0.0001 #the tolerance for the location of the vertex to count
 maxIter = 1000 #the maximum amount of iterations given to each model
 
-#run(test, tolerance, maxIter, x, dx, rate, minimum)
+params = (test, tolerance, maxIter, x, dx, rate, minimum)
+run(params)
 
 GD = [float(row) for row in open('GradientDescent.txt').read().split('\n')[1:]]
 MO = [float(row) for row in open('Momentum.txt').read().split('\n')[1:]]
@@ -99,5 +106,5 @@ MO += [MO[-1] for row in range(size - len(MO))]
 NE += [NE[-1] for row in range(size - len(NE))]
 NA += [NA[-1] for row in range(size - len(NA))]
 DE += [DE[-1] for row in range(size - len(DE))]
-print(DE)
+
 plot(range(size), GD, MO, NE, NA, DE)
