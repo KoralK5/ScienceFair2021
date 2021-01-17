@@ -12,6 +12,7 @@ def gradientDescent(func, args, pos, dx):
 def demo(
 	test,
 	tolerance = 0.01,
+	maxIter = 1000,
 	x = 100,
 	dx = 0.001, 
 	rate = 0.1,
@@ -22,8 +23,7 @@ def demo(
 	f.write('Gradient Descent'); f.close()
 
 	adjust = 0
-	t = 0
-	while test(x) > vertex + tolerance or test(x) < vertex - tolerance:
+	for t in range(1, maxIter + 1):
 		print(f'\nx: {x}\nf(x): {test(x)}\najustment: {adjust}')
 
 		adjust = gradientDescent(test, [x], [0], dx)
@@ -32,7 +32,8 @@ def demo(
 		f = open('GradientDescent.txt', 'a')
 		f.write(f'\n{test(x)}'); f.close()
 		
-		t += 1
+		if abs(vertex - test(x)) < tolerance:
+			break
 
 	print('\n\nGRADIENT DESCENT')
 	print(f'Local Minimum: {test(x)}')
