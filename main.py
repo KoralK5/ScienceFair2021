@@ -61,14 +61,14 @@ def run(params):
 	print(f'Time: {end5 - start5}s')
 	print(f'Iterations: {t5}')
 
-def plot(iteration, GD, MO, NE, NA, DE):
+def plot(GD, MO, NE, NA, DE):
 	from matplotlib import pyplot as plt
 
-	plt.fill_between(iteration, GD, alpha=0.7, linewidth=3, label='Gradient Descent', color='b')
-	plt.fill_between(iteration, MO, alpha=0.7, linewidth=3, label='Momentum', color='r') 
-	plt.fill_between(iteration, NE, alpha=0.7, linewidth=3, label='Nesterov', color='orange') 
-	plt.fill_between(iteration, NA, alpha=0.7, linewidth=3, label='NADAM', color='g') 
-	plt.fill_between(iteration, DE, alpha=0.7, linewidth=3, label='Debounce', color='m')
+	plt.fill_between(range(len(GD)), GD, alpha=0.7, linewidth=3, label='Gradient Descent', color='b')
+	plt.fill_between(range(len(MO)), MO, alpha=0.7, linewidth=3, label='Momentum', color='r') 
+	plt.fill_between(range(len(NE)), NE, alpha=0.7, linewidth=3, label='Nesterov', color='orange') 
+	plt.fill_between(range(len(NA)), NA, alpha=0.7, linewidth=3, label='NADAM', color='g') 
+	plt.fill_between(range(len(DE)), DE, alpha=0.7, linewidth=3, label='Debounce', color='m')
 
 	plt.title('NN Optimizer Comparison')
 	plt.xlabel('Iteration')
@@ -101,12 +101,5 @@ MO = [float(row) for row in open('Momentum.txt').read().split('\n')[1:]]
 NE = [float(row) for row in open('Nesterov.txt').read().split('\n')[1:]]
 NA = [float(row) for row in open('NADAM.txt').read().split('\n')[1:]]
 DE = [float(row) for row in open('Debounce.txt').read().split('\n')[1:]]
-size = max(len(GD), len(MO), len(NE), len(NA), len(DE))
 
-GD += [GD[-1] for row in range(size - len(GD))]
-MO += [MO[-1] for row in range(size - len(MO))]
-NE += [NE[-1] for row in range(size - len(NE))]
-NA += [NA[-1] for row in range(size - len(NA))]
-DE += [DE[-1] for row in range(size - len(DE))]
-
-plot(range(size), GD, MO, NE, NA, DE)
+plot(GD, MO, NE, NA, DE)
