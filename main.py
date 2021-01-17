@@ -64,11 +64,11 @@ def run(params):
 def plot(iteration, GD, MO, NE, NA, DE):
 	from matplotlib import pyplot as plt
 
-	plt.fill_between(iteration, GD, alpha=0.5, label = 'Gradient Descent')
-	plt.fill_between(iteration, MO, alpha=0.5, label = 'Momentum') 
-	plt.fill_between(iteration, NE, alpha=0.5, label = 'Nesterov') 
-	plt.fill_between(iteration, NA, alpha=0.5, label = 'NADAM') 
-	plt.fill_between(iteration, DE, alpha=0.5, label = 'Debounce')
+	plt.fill_between(iteration, GD, alpha=0.7, linewidth=3, label='Gradient Descent', color='b')
+	plt.fill_between(iteration, MO, alpha=0.7, linewidth=3, label='Momentum', color='r') 
+	plt.fill_between(iteration, NE, alpha=0.7, linewidth=3, label='Nesterov', color='orange') 
+	plt.fill_between(iteration, NA, alpha=0.7, linewidth=3, label='NADAM', color='g') 
+	plt.fill_between(iteration, DE, alpha=0.7, linewidth=3, label='Debounce', color='m')
 
 	plt.title('NN Optimizer Comparison')
 	plt.xlabel('Iteration')
@@ -91,9 +91,11 @@ theta = 0.55 #a hyperparameter for Debounce
 tolerance = 0.0001 #the tolerance for the location of the vertex to count
 maxIter = 1000 #the maximum amount of iterations given to each model
 
+#running the tests
 params = (test, tolerance, maxIter, x, dx, rate, minimum)
 run(params)
 
+#reading the data
 GD = [float(row) for row in open('GradientDescent.txt').read().split('\n')[1:]]
 MO = [float(row) for row in open('Momentum.txt').read().split('\n')[1:]]
 NE = [float(row) for row in open('Nesterov.txt').read().split('\n')[1:]]
