@@ -1,11 +1,10 @@
 import GradientDescent as gd
-
-def momentum(velocity, beta, gradient, rate):
-	return beta * velocity + gradient * rate
+import Momentum as M
 
 def demo(
 	test,
 	tolerance = 0.01,
+	maxIter = 1000,
 	x = 100,
 	dx = 0.001,
 	rate = 0.1,
@@ -17,18 +16,18 @@ def demo(
 	f.write('NADAM'); f.close()
 
 	velocity = 0
-	t = 0
-	while test(x) > vertex + tolerance or test(x) < vertex - tolerance:
+	for t in range(1, maxIter + 1):
 		print(f'\nx: {x}\nf(x): {test(x)}\nvelocity: {velocity}')
 
 		gradient = gd.gradientDescent(test, [x], [0], dx)
-		velocity = momentum(velocity, beta, gradient, rate)
+		velocity = M.momentum(velocity, beta, gradient, rate)
 		x -= beta * velocity + rate * gradient
 
 		f = open('NADAM.txt', 'a')
 		f.write(f'\n{test(x)}'); f.close()
 
-		t += 1
+		if abs(vertex - test(x)) < tolerance:
+			break
 	
 	print('\n\nNADAM')
 	print(f'Local Minimum: {test(x)}')
