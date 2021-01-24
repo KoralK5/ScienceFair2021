@@ -1,27 +1,32 @@
+from copy import deepcopy
 import random
 import NeuralNetwork as nn
 import GradientDescent as GD
-from copy import deepcopy
-
-def optimize(inputs, weights, outputs, iterations, rate):
-	newWeights = deepcopy(weights)
-	for row in range(len(newWeights)):
-		for column in range(len(newWeights[row])):
-			for n in range(iterations):
-				newWeights[row][column] -= GD.gradientDescent(nn.cost, [deepcopy(inputs), deepcopy(outputs), deepcopy(newWeights)], [row, column], 0.001) * rate
-	return newWeights
+import Momentum as M
+import Nesterov as NE
+import NADAM as NA
+import Debounce as D
 
 random.seed(1)
 
-rate = 1
-iterations = 100
-inputs = [1, 0, 1]
-outputs = [1, 1, 0]
-weights = [[random.uniform(0, 1) for row in range(4)] for row in range(len(inputs))]
+dx = 0.001 #a hyperparameter
+rate = 0.1 #a hyperparameter
+beta = 0.9 #a hyperparameter
+theta = 0.55 #a hyperparameter for Debounce
+tolerance = 0.0001 #the tolerance for the location of the vertex to count
+maxIter = 1000 #the maximum amount of iterations given to each model
 
-weights = optimize(inputs, weights, outputs, iterations, rate)
+iters = 50
+optIter = 10
+inputs = [1, 0, 1, 0]
+outputs = [1, 1, 0, 1]
+weights = [[random.uniform(0, 1) for row in range(len(inputs)+1)] for row in range(len(inputs))]
 
-inputs, outputs = nn.neuralNetwork(inputs, weights)
-
-for row in outputs:
-	print(sum(row)/len(row))
+for row in range(iters):
+	weights = GD.optimize(inputs, weights, outputs, optIter, rate)
+	#weights = M.optimize(inputs, weights, outputs, optIter, rate, beta)
+	#weights = NE.optimize(inputs, weights, outputs, optIter, rate, beta)
+	#weights = NA.optimize(inputs, weights, outputs, optIter, rate, beta)
+	#weights = D.optimize(inputs, weights, outputs, optIter, rate, beta, theta)
+	print('Iteration', row)
+	print(nn.cost(inputs, outputs, weights), '\n')
