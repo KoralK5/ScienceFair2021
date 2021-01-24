@@ -1,55 +1,33 @@
-import numpy as np
-import copy as cp
+import random
+import NeuralNetwork as nn
+import GradientDescent as GD
+import Momentum as M
+import Nesterov as NE
+import NADAM as NA
+import Debounce as D
+from copy import deepcopy
 
-def cost(inputs, outputs, weights):
-	return sum((np.array(outputs) - np.array(layer(inputs, weights))) ** 2)
+random.seed(1)
 
-def sumAct(x):
-	return np.tanh(sum(x))
+dx = 0.001 #a hyperparameter
+rate = 0.1 #a hyperparameter
+beta = 0.9 #a hyperparameter
+theta = 0.55 #a hyperparameter for Debounce
+tolerance = 0.0001 #the tolerance for the location of the vertex to count
+maxIter = 1000 #the maximum amount of iterations given to each model
 
-def ReLU(x):
-	return np.tanh(max(list(x) + [0]))
+iterations = 100
+inputs = [1, 0, 1, 0]
+outputs = [1, 1, 0, 1]
+weights = [[random.uniform(0, 1) for row in range(len(inputs)+1)] for row in range(len(inputs))]
 
-def adjustWeight(inputs, outputs, weights, addWeight, pos):
-	newWeights = cp.deepcopy(weights)
-	newWeights[pos[0]][pos[1]] += addWeight
-	cost1 = cost(inputs, outputs, weights)
-	cost2 = cost(inputs, outputs, newWeights)
-	return (cost2 - cost1) / addWeight
+weights = GD.optimize(inputs, weights, outputs, iterations, rate)
+#weights = M.optimize(inputs, weights, outputs, iterations, rate, beta)
+#weights = NE.optimize(inputs, weights, outputs, iterations, rate, beta)
+#weights = NA.optimize(inputs, weights, outputs, iterations, rate, beta)
+#weights = D.optimize(inputs, weights, outputs, iterations, rate, beta, theta)
 
-def adjustInput(inputs, outputs, weights, addInput, pos):
-	newInputs = cp.deepcopy(inputs)
-	newInputs[pos] += addInput
-	cost1 = cost(inputs, outputs, weights)
-	cost2 = cost(newInputs, outputs, weights)
-	return (cost2 - cost1) / addInput
+inputs, outputs = nn.neuralNetwork(inputs, weights)
 
-def adjustLayer(inputs, outputs, weights, addInput, addWeight):
-	inputAdjust, weightAdjust = [], []
-	for neuronNumber in range(len(weights)):
-		weightAdjust.append(adjustWeight(inputs, outputs, weights, addWeight, neuronNumber))
-		inputAdjust.append(adjustInput(inputs, outputs, weights, addInput, neuronNumber))
-	return inputAdjust, weightAdjust
-
-def backPropagation(inputs, initialOutputs, weights, addInput, addWeight):
-	outputs = np.array(initialOutputs)
-	neuronOutputs = neuralNetwork()
-
-def neuron(inputs, weights):
-	biasedInputs = cp.deepcopy(list(inputs)) + [1]
-	return sumAct(np.array(biasedInputs) * np.array(weights))
-
-def layer(inputs, weights):
-	outputs = []
-	for weight in weights:
-		outputs.append(neuron(inputs, weight))
-	return outputs
-
-def neuralNetwork(initialInputs, weights):
-	neuronOutputs = []	
-	inputs = cp.deepcopy(initialInputs)
-
-	for weight in weights:
-		inputs = np.array(layer(inputs, weight))
-		neuronOutputs.append(inputs)
-	return inputs, np.array(neuronOutputs)
+for row in outputs:
+	print(sum(row)/len(row))
