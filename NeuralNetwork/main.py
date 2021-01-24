@@ -28,5 +28,7 @@ for row in range(iters):
 	#weights = NE.optimize(inputs, weights, outputs, optIter, rate, beta)
 	#weights = NA.optimize(inputs, weights, outputs, optIter, rate, beta)
 	#weights = D.optimize(inputs, weights, outputs, optIter, rate, beta, theta)
-	print('Iteration', row)
-	print(nn.cost(inputs, outputs, weights), '\n')
+	print('Iteration', row+1)
+	print('Cost:', nn.cost(inputs, outputs, weights), '\n')
+
+print('Final Cost:', nn.cost(inputs, outputs, weights))
