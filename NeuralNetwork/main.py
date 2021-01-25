@@ -13,8 +13,6 @@ dx = 0.001 #a hyperparameter
 rate = 0.1 #a hyperparameter
 beta = 0.9 #a hyperparameter
 theta = 0.55 #a hyperparameter for Debounce
-tolerance = 0.0001 #the tolerance for the location of the vertex to count
-maxIter = 1000 #the maximum amount of iterations given to each model
 
 iters = 50
 optIter = 10
