@@ -1,4 +1,4 @@
-def format(path):
+def format(path, lenght, width):
 	from PIL import Image, ImageOps
 	yes = f'{path}yes'
 	no = f'{path}no'
@@ -10,7 +10,7 @@ def format(path):
 	full, num = True, 0
 	while full:
 		try:
-			inputs += ImageOps.grayscale(Image.open(f'{yes}\\y{num}.jpg')).getdata()
+			inputs += [list(ImageOps.grayscale(Image.open(f'{yes}\\y{num}.jpg')).resize((lenght, width)).getdata())]
 			outputs += [[1]]
 		except:
 			full = False
@@ -19,10 +19,10 @@ def format(path):
 	full, num = True, 0
 	while full:
 		try:
-			inputs += ImageOps.grayscale(Image.open(f'{no}\\no{num}.jpg')).getdata()
+			inputs += [list(ImageOps.grayscale(Image.open(f'{no}\\no{num}.jpg')).resize((lenght, width)).getdata())]
 			outputs += [[0]]
 		except:
 			full = False
 		num += 1
-	return inputs, outputs
 	
+	return inputs, outputs
