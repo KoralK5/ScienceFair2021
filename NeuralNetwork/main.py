@@ -45,7 +45,6 @@ print('Data Formatted')
 dx = 0.001
 rate = 0.1
 beta = 0.9
-theta = 1000
 scale = 0.1
 layerData = [1, 16, 16, len(outputsD[0])]
 
