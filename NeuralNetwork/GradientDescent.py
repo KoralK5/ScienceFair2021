@@ -1,4 +1,4 @@
-import NeuralNetwork2 as nn
+import NeuralNetwork as nn
 from copy import deepcopy
 
 class Layer:
@@ -59,8 +59,9 @@ class Network:
 def backPropagation(inputs, weights, outputs, dx, rate):
 	newWeights = deepcopy(weights)[::-1]
 	newOutputs = deepcopy(outputs)
-	networkInputs = deepcopy(nn.neuralNetwork(inputs, weights))[-2::-1] + [deepcopy(inputs)]
+	inps = nn.neuralNetwork(inputs, weights)
+	networkInputs = inps[-2::-1] + [deepcopy(inputs)]
 	for currentLayer in range(len(networkInputs)):
 		layer = Layer(networkInputs[currentLayer], newWeights[currentLayer], newOutputs, dx)
 		newWeights[currentLayer], newOutputs = layer.adjustLayer(rate)
-	return newWeights[::-1]
+	return newWeights[::-1], inps[-1]
