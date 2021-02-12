@@ -11,18 +11,12 @@ import Debounce as D
 print('Imports Sucessfull')
 
 def grab(path):
-	trainingData = open(path, 'r+').read()
-	trainingData = trainingData.split("\n")
+	trainingData = open(path, 'r+').read().split("\n")
 	trainingData = trainingData[1:len(trainingData)-1]
 
-	for j in range(len(trainingData)):
-		trainingData[j] = trainingData[j].split(",")
-	for x in range(len(trainingData)):
-		for y in range(len(trainingData[x])):
-			trainingData[x][y] = int(trainingData[x][y])
-	trainingData = np.array(trainingData)
+	trainingData = np.array([[int(col) for col in row.split(',')] for row in trainingData])
 
-	trainingInputs = trainingData.transpose()[1:len(trainingData) + 1].transpose()
+	trainingInputs = [row/255 for row in trainingData.transpose()[1:len(trainingData) + 1].transpose()]
 	trainingInputs = np.array([np.array(i) for i in trainingInputs])
 
 	trainingOutputs = trainingData.transpose()[0]
@@ -35,10 +29,11 @@ def grab(path):
 
 	return trainingInputs, trainingOutputs
 
-path = 'D:\\Users\\Koral Kulacoglu\\Coding\\python\\AI\\ScienceFair21\\NeuralNetwork\\'
+path = 'path'
 dataPath = f'{path}\\train.csv'
 
 inputsD, outputsD = grab(dataPath)
+
 print('Data Formatted')
 
 dx = 0.001
@@ -61,9 +56,6 @@ while 21600 - time.time() + start > 0:
 		inputs = inputsD[inp]
 		outputs = outputsD[inp]
 
-		# netCorrect = GD.Network(inputs, weights, outputs, dx)
-		# weights = netCorrect.adjustNetwork(rate)
-
 		weights, newOutputs = GD.backPropagation(inputs, weights, outputs, dx, rate)
 		#weights = M.optimize(inputs, weights, outputs, rate, dx, beta)
 		#weights = NE.optimize(inputs, weights, outputs, rate, dx, beta)
@@ -72,15 +64,15 @@ while 21600 - time.time() + start > 0:
 		
 		cost += nn.neuralNetworkCost(inputs, weights, outputs)
 		
-		if not (inp+1)%10:
+		if not (inp+1)%1:
 			print('\n\nNetwork:', num+1)
 			print(f'Time: {int(21600 - time.time() + start)}s')
-			print('Cost:', cost/10)
+			print('Cost:', cost/1)
 			print('\nPred:', newOutputs)
 			print('Real:', outputs)
 
 			f = open(f'{path}scores.csv', 'a')
-			f.write(f'\n{cost/10}'); f.close()
+			f.write(f'\n{cost/1}'); f.close()
 			cost = 0
 
 		np.save(f'{path}weights.npy', np.array(weights))
