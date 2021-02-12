@@ -11,8 +11,7 @@ import Debounce as D
 print('Imports Sucessfull')
 
 def grab(path):
-	trainingDataFile = open(path, 'r')
-	trainingData = trainingDataFile.read()
+	trainingData = open(path, 'r').read()
 	trainingData = trainingData.split("\n")
 	trainingData = trainingData[1:len(trainingData)-1]
 
@@ -57,7 +56,7 @@ open(f'{path}scores.txt', 'r+').truncate(0)
 start = time.time()
 
 num, cost = 0, 0
-while time.time()-start < 43200:
+while 43200 - time.time() + start > 0:
 	for inp in range(len(outputsD)):
 		inputs = inputsD[inp]
 		outputs = outputsD[inp]
@@ -75,7 +74,7 @@ while time.time()-start < 43200:
 		
 		if not (inp+1)%100:
 			print('\n\nNetwork:', num+1)
-			print(f'Time: {int(43200-time.time()+start)}s')
+			print(f'Time: {int(43200 - time.time() + start)}s')
 			print('Cost:', cost/100)
 			print('\nPred:', newOutputs)
 			print('Real:', outputs)
