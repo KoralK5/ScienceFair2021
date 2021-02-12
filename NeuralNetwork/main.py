@@ -11,7 +11,7 @@ import Debounce as D
 print('Imports Sucessfull')
 
 def grab(path):
-	trainingData = open(path, 'r').read()
+	trainingData = open(path, 'r+').read()
 	trainingData = trainingData.split("\n")
 	trainingData = trainingData[1:len(trainingData)-1]
 
