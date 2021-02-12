@@ -1,9 +1,6 @@
 import numpy as np
 from copy import deepcopy
 
-def ReLU(x):
-	return max(x, 0)
-
 def sigmoid(x):
 	return 1 / (1 + np.exp(-x))
 
