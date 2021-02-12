@@ -45,18 +45,18 @@ dx = 0.001
 rate = 0.1
 beta = 0.9
 scale = 0.1
-layerData = [1, 16, 16, len(outputsD[0])]
+layerData = [16, 16, len(outputsD[0])]
 
 weights = nn.generateWeights(layerData, len(inputsD[0]))
 
 print('Weights Initialized')
 print('Training...')
 
-open(f'{path}scores.txt', 'r+').truncate(0)
+open(f'{path}scores.csv', 'r+').truncate(0)
 start = time.time()
 
 num, cost = 0, 0
-while 43200 - time.time() + start > 0:
+while 21600 - time.time() + start > 0:
 	for inp in range(len(outputsD)):
 		inputs = inputsD[inp]
 		outputs = outputsD[inp]
@@ -72,20 +72,18 @@ while 43200 - time.time() + start > 0:
 		
 		cost += nn.neuralNetworkCost(inputs, weights, outputs)
 		
-		if not (inp+1)%100:
+		if not (inp+1)%10:
 			print('\n\nNetwork:', num+1)
-			print(f'Time: {int(43200 - time.time() + start)}s')
-			print('Cost:', cost/100)
+			print(f'Time: {int(21600 - time.time() + start)}s')
+			print('Cost:', cost/10)
 			print('\nPred:', newOutputs)
 			print('Real:', outputs)
 
-			f = open(f'{path}scores.txt', 'a')
-			f.write(f'\n{cost/100}'); f.close()
+			f = open(f'{path}scores.csv', 'a')
+			f.write(f'\n{cost/10}'); f.close()
 			cost = 0
 
-		open(f'{path}weights.txt', 'r+').truncate(0)
-		f = open(f'{path}weights.txt', 'a')
-		f.write(f'{weights}'); f.close()
+		np.save(f'{path}weights.npy', np.array(weights))
 		num += 1
 
 print('Final Cost:', cost)
