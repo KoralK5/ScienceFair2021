@@ -1,5 +1,5 @@
 from copy import deepcopy
-from PIL import Image
+import matplotlib.pyplot as plt; plt.gray()
 import numpy as np
 import NeuralNetwork as nn
 
@@ -51,8 +51,7 @@ for row in range(len(outputs)):
 	predNA = list(newOutputsNA).index(max(list(newOutputsNA)))
 	predD = list(newOutputsD).index(max(list(newOutputsD)))
 
-	input('\n- ')
-	print(f'Real: {real}\n')
+	print(f'\n'*100, f'Real: {real}\n')
 
 	print('      Guess | Certainty')
 	print(f'GD:       {predGD} | {int(max(list(newOutputsGD))*100)}%')
@@ -60,3 +59,10 @@ for row in range(len(outputs)):
 	print(f'NE:       {predNE} | {int(max(list(newOutputsNE))*100)}%')
 	print(f'NA:       {predNA} | {int(max(list(newOutputsNA))*100)}%')
 	print(f'D :       {predD} | {int(max(list(newOutputsD))*100)}%')
+
+	img = np.array([col*255 for col in inputs[row]])
+	img = img.reshape(28, 28)
+	plt.imshow(img)
+	plt.show(block=False)
+	plt.pause(5)
+	plt.close()
