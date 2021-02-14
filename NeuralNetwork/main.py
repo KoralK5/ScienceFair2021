@@ -29,7 +29,7 @@ def grab(path):
 
 	return trainingInputs, trainingOutputs
 
-path = 'path'
+path = 'D:\\Users\\Koral Kulacoglu\\Coding\\python\\AI\\ScienceFair21\\NeuralNetwork\\'
 dataPath = f'{path}\\train.csv'
 
 inputsD, outputsD = grab(dataPath)
@@ -57,25 +57,25 @@ while 21600 - time.time() + start > 0:
 		outputs = outputsD[inp]
 
 		weights, newOutputs = GD.backPropagation(inputs, weights, outputs, dx, rate)
-		#weights = M.optimize(inputs, weights, outputs, rate, dx, beta)
-		#weights = NE.optimize(inputs, weights, outputs, rate, dx, beta)
-		#weights = NA.optimize(inputs, weights, outputs, rate, dx, beta)
-		#weights = D.optimize(inputs, weights, outputs, rate, dx, beta, scale)
+		# weights, newOutputs = M.backPropagation(inputs, weights, outputs, dx, rate, beta)
+		# weights, newOutputs = NE.backPropagation(inputs, weights, outputs, dx, rate, beta)
+		# weights, newOutputs = NA.backPropagation(inputs, weights, outputs, dx, rate, beta)
+		# weights, newOutputs = D.backPropagation(inputs, weights, outputs, dx, rate, beta, scale)
 		
 		cost += nn.neuralNetworkCost(inputs, weights, outputs)
 		
-		if not (inp+1)%1:
+		if not (inp+1)%10:
 			print('\n\nNetwork:', num+1)
 			print(f'Time: {int(21600 - time.time() + start)}s')
-			print('Cost:', cost/1)
+			print('Cost:', cost/10)
 			print('\nPred:', newOutputs)
 			print('Real:', outputs)
 
 			f = open(f'{path}scores.csv', 'a')
-			f.write(f'\n{cost/1}'); f.close()
+			f.write(f'\n{cost/10}'); f.close()
 			cost = 0
 
-		np.save(f'{path}weights.npy', np.array(weights))
+		np.save(f'{path}weights.npy', np.array(weights, dtype=object))
 		num += 1
 
 print('Final Cost:', cost)
