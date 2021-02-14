@@ -24,6 +24,7 @@ class Layer:
 		for neuron in range(len(self.weights)):
 			for weight in range(len(self.weights[neuron])):
 				newWeights[neuron][weight] -= self.adjustWeight(neuron, weight) * rate
+				
 		for neuron in range(len(self.inputs)):
 			newInputs[neuron] -= self.adjustNeuron(neuron) * rate
 		return newWeights, newInputs
