@@ -27,7 +27,7 @@ def getWeights(path):
 		path = np.load(f, allow_pickle=True)
 	return path
 
-path = ''
+path = '\\'
 
 inputs, outputs = grab(f'{path}test.csv')
 weightsGD = getWeights(f'{path}GDweights.npy')
