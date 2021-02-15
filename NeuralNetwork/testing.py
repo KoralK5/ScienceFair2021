@@ -27,37 +27,37 @@ def getWeights(path):
 		path = np.load(f, allow_pickle=True)
 	return path
 
-path = 'path\\'
+path = ''
 
 inputs, outputs = grab(f'{path}test.csv')
-# weightsGD = getWeights(f'{path}GDweights.npy')
-# weightsM = getWeights(f'{path}Mweights.npy')
-# weightsNE = getWeights(f'{path}NEweights.npy')
+weightsGD = getWeights(f'{path}GDweights.npy')
+weightsM = getWeights(f'{path}Mweights.npy')
+weightsNE = getWeights(f'{path}NEweights.npy')
 weightsNA = getWeights(f'{path}NAweights.npy')
 weightsD = getWeights(f'{path}Dweights.npy')
 
 num = 0
 GDscore, Mscore, NEscore, NAscore, Dscore = 0, 0, 0, 0, 0
 for row in range(len(outputs)):
-	# newOutputsGD = nn.neuralNetwork(inputs[row], weightsGD)[-1]
-	# newOutputsM = nn.neuralNetwork(inputs[row], weightsM)[-1]
-	# newOutputsNE = nn.neuralNetwork(inputs[row], weightsNE)[-1]
+	newOutputsGD = nn.neuralNetwork(inputs[row], weightsGD)[-1]
+	newOutputsM = nn.neuralNetwork(inputs[row], weightsM)[-1]
+	newOutputsNE = nn.neuralNetwork(inputs[row], weightsNE)[-1]
 	newOutputsNA = nn.neuralNetwork(inputs[row], weightsNA)[-1]
 	newOutputsD = nn.neuralNetwork(inputs[row], weightsD)[-1]
 
 	real = list(outputs[row]).index([1])
-	# predGD = list(newOutputsGD).index(max(list(newOutputsGD)))
-	# predM = list(newOutputsM).index(max(list(newOutputsM)))
-	# predNE = list(newOutputsNE).index(max(list(newOutputsNE)))
+	predGD = list(newOutputsGD).index(max(list(newOutputsGD)))
+	predM = list(newOutputsM).index(max(list(newOutputsM)))
+	predNE = list(newOutputsNE).index(max(list(newOutputsNE)))
 	predNA = list(newOutputsNA).index(max(list(newOutputsNA)))
 	predD = list(newOutputsD).index(max(list(newOutputsD)))
 	
-	# if predGD == real:
-	# 	GDscore += 1
-	# if predM == real:
-	# 	Mscore += 1
-	# if predNE == real:
-	# 	NEscore += 1
+	if predGD == real:
+		GDscore += 1
+	if predM == real:
+		Mscore += 1
+	if predNE == real:
+		NEscore += 1
 	if predNA == real:
 		NAscore += 1
 	if predD == real:
@@ -67,9 +67,9 @@ for row in range(len(outputs)):
 
 	print('    Guess | Certainty | Score')
 	print('------------------------------')
-	# print(f'GD:   {predGD}   |    {int(max(list(newOutputsGD))*100)}%    |  {int(GDscore/(row+1)*100)}%')
-	# print(f'M :   {predM}   |    {int(max(list(newOutputsM))*100)}%    |  {int(Mscore/(row+1)*100)}%')
-	# print(f'NE:   {predNE}   |    {int(max(list(newOutputsNE))*100)}%    |  {int(NEscore/(row+1)*100)}%')
+	print(f'GD:   {predGD}   |    {int(max(list(newOutputsGD))*100)}%    |  {int(GDscore/(row+1)*100)}%')
+	print(f'M :   {predM}   |    {int(max(list(newOutputsM))*100)}%    |  {int(Mscore/(row+1)*100)}%')
+	print(f'NE:   {predNE}   |    {int(max(list(newOutputsNE))*100)}%    |  {int(NEscore/(row+1)*100)}%')
 	print(f'NA:   {predNA}   |    {int(max(list(newOutputsNA))*100)}%    |  {int(NAscore/(row+1)*100)}%')
 	print(f'D :   {predD}   |    {int(max(list(newOutputsD))*100)}%    |  {int(Dscore/(row+1)*100)}%')
 	
