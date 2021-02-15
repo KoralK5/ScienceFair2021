@@ -29,7 +29,7 @@ def grab(path):
 
 	return trainingInputs, trainingOutputs
 
-path = 'D:\\Users\\Koral Kulacoglu\\Coding\\python\\AI\\ScienceFair21\\NeuralNetwork\\'
+path = ''
 dataPath = f'{path}\\train.csv'
 
 inputsD, outputsD = grab(dataPath)
@@ -50,33 +50,35 @@ print('Training...')
 open(f'{path}scores.csv', 'r+').truncate(0)
 start = time.time()
 
-num, cost = 0, 0
-while 21600 - time.time() + start > 0:
-	for inp in range(len(outputsD)):
-		inputs = inputsD[inp]
-		outputs = outputsD[inp]
+num, cost, t = 0, 0, 32347
+for inp in range(len(outputsD)):
+	inputs = inputsD[inp]
+	outputs = outputsD[inp]
 
-		weights, newOutputs = GD.backPropagation(inputs, weights, outputs, dx, rate)
-		# weights, newOutputs = M.backPropagation(inputs, weights, outputs, dx, rate, beta)
-		# weights, newOutputs = NE.backPropagation(inputs, weights, outputs, dx, rate, beta)
-		# weights, newOutputs = NA.backPropagation(inputs, weights, outputs, dx, rate, beta)
-		# weights, newOutputs = D.backPropagation(inputs, weights, outputs, dx, rate, beta, scale)
-		
-		cost += nn.neuralNetworkCost(inputs, weights, outputs)
-		
-		if not (inp+1)%10:
-			print('\n\nNetwork:', num+1)
-			print(f'Time: {int(21600 - time.time() + start)}s')
-			print('Cost:', cost/10)
-			print('\nPred:', newOutputs)
-			print('Real:', outputs)
+	weights, newOutputs = GD.backPropagation(inputs, weights, outputs, dx, rate)
+	# weights, newOutputs = M.backPropagation(inputs, weights, outputs, dx, rate, beta)
+	# weights, newOutputs = NE.backPropagation(inputs, weights, outputs, dx, rate, beta)
+	# weights, newOutputs = NA.backPropagation(inputs, weights, outputs, dx, rate, beta)
+	# weights, newOutputs = D.backPropagation(inputs, weights, outputs, dx, rate, beta, scale)
 
-			f = open(f'{path}scores.csv', 'a')
-			f.write(f'\n{cost/10}'); f.close()
-			cost = 0
+	cost += nn.neuralNetworkCost(inputs, weights, outputs)
+	t = int(32347 - time.time() + start)
+	if t < 0:
+		break
 
-		np.save(f'{path}weights.npy', np.array(weights, dtype=object))
-		num += 1
+	if not (inp+1)%10:
+		print('\n\nNetwork:', num+1)
+		print(f'Time: {t}s')
+		print('Cost:', cost/10)
+		print('\nPred:', newOutputs)
+		print('Real:', outputs)
+
+		f = open(f'{path}scores.csv', 'a')
+		f.write(f'\n{cost/10}'); f.close()
+		cost = 0
+
+	np.save(f'{path}GDweights.npy', np.array(weights, dtype=object))
+	num += 1
 
 print('Final Cost:', cost)
 print('Iterations:', num)
