@@ -67,11 +67,11 @@ for row in range(len(outputs)):
 
 	print('                    Guess | Certainty | Score')
 	print('                    --------------------------')
-	print(f'Gradient Descent:   {predGD}   |    {int(max(list(newOutputsGD))*100)}%    |  {int(GDscore/(row+1)*100)}%')
-	print(f'Momentum:           {predM}   |    {int(max(list(newOutputsM))*100)}%    |  {int(Mscore/(row+1)*100)}%')
-	print(f'Nesterov:           {predNE}   |    {int(max(list(newOutputsNE))*100)}%    |  {int(NEscore/(row+1)*100)}%')
-	print(f'NADAM:              {predNA}   |    {int(max(list(newOutputsNA))*100)}%    |  {int(NAscore/(row+1)*100)}%')
-	print(f'Debounce:           {predD}   |    {int(max(list(newOutputsD))*100)}%    |  {int(Dscore/(row+1)*100)}%')
+	print(f'Gradient Descent:     {predGD}   |    {int(max(list(newOutputsGD))*100)}%    |  {int(GDscore/(row+1)*100)}%')
+	print(f'Momentum:             {predM}   |    {int(max(list(newOutputsM))*100)}%    |  {int(Mscore/(row+1)*100)}%')
+	print(f'Nesterov:             {predNE}   |    {int(max(list(newOutputsNE))*100)}%    |  {int(NEscore/(row+1)*100)}%')
+	print(f'NADAM:                {predNA}   |    {int(max(list(newOutputsNA))*100)}%    |  {int(NAscore/(row+1)*100)}%')
+	print(f'Debounce:             {predD}   |    {int(max(list(newOutputsD))*100)}%    |  {int(Dscore/(row+1)*100)}%')
 	
 	img = np.array([col*255 for col in inputs[row]])
 	img = img.reshape(28, 28)
