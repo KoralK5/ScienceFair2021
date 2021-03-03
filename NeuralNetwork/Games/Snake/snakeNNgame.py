@@ -26,16 +26,16 @@ def putApple(arr):
 def go(arr, head, tail):
 	if head[2] == 'W':
 		try:
-			if arr[head[0]-1][head[1]] == '🍎':
-				arr[head[0]-1][head[1]] = '🟩'
+			if arr[head[0]-1%10][head[1]] == '🍎':
+				arr[head[0]-1%10][head[1]] = '🟩'
 				head[0] -= 1
 				return putApple(arr), tail
 
-			elif arr[head[0]-1][head[1]] == '🟩':
+			elif arr[head[0]-1%10][head[1]] == '🟩':
 				return 0, 0
 
 			else:
-				arr[head[0]-1][head[1]] = '🟩'
+				arr[head[0]-1%10][head[1]] = '🟩'
 				arr[tail[0][0]][tail[0][1]] = '⬛'
 				
 				tail = tail[1:]
@@ -46,16 +46,16 @@ def go(arr, head, tail):
 
 	elif head[2] == 'S':
 		try:
-			if arr[head[0]+1][head[1]] == '🍎':
-				arr[head[0]+1][head[1]] = '🟩'
+			if arr[(head[0]+1)%10][head[1]] == '🍎':
+				arr[(head[0]+1)%10][head[1]] = '🟩'
 				head[0] += 1
 				return putApple(arr), tail
 
-			elif arr[head[0]+1][head[1]] == '🟩':
+			elif arr[(head[0]+1)%10][head[1]] == '🟩':
 				return 0, 0
 
 			else:
-				arr[head[0]+1][head[1]] = '🟩'
+				arr[(head[0]+1)%10][head[1]] = '🟩'
 				arr[tail[0][0]][tail[0][1]] = '⬛'
 				
 				tail = tail[1:]
@@ -66,16 +66,16 @@ def go(arr, head, tail):
 
 	elif head[2] == 'A':
 		try:
-			if arr[head[0]][head[1]-1] == '🍎':
-				arr[head[0]][head[1]-1] = '🟩'
+			if arr[head[0]][(head[1]-1)%10] == '🍎':
+				arr[head[0]][(head[1]-1)%10] = '🟩'
 				head[1] -= 1
 				return putApple(arr), tail
 
-			elif arr[head[0]][head[1]-1] == '🟩':
+			elif arr[head[0]][(head[1]-1)%10] == '🟩':
 				return 0, 0
 
 			else:
-				arr[head[0]][head[1]-1] = '🟩'
+				arr[head[0]][(head[1]-1)%10] = '🟩'
 				arr[tail[0][0]][tail[0][1]] = '⬛'
 				
 				tail = tail[1:]
@@ -86,16 +86,16 @@ def go(arr, head, tail):
 
 	elif head[2] == 'D':
 		try:
-			if arr[head[0]][head[1]+1] == '🍎':
-				arr[head[0]][head[1]+1] = '🟩'
+			if arr[head[0]][(head[1]+1)%10] == '🍎':
+				arr[head[0]][(head[1]+1)%10] = '🟩'
 				head[1] += 1
 				return putApple(arr), tail
 
-			elif arr[head[0]][head[1]+1] == '🟩':
+			elif arr[head[0]][(head[1]+1)%10] == '🟩':
 				return 0, 0
 				
 			else:
-				arr[head[0]][head[1]+1] = '🟩'
+				arr[head[0]][(head[1]+1)%10] = '🟩'
 				arr[tail[0][0]][tail[0][1]] = '⬛'
 			
 				tail = tail[1:]
@@ -118,7 +118,7 @@ def binarize(arr, head):
 				inputs += [10]
 	return inputs
 
-def play(weights):
+def play(weights, inp, net, t, costBatch):
 	arr = [['⬛']*10 for row in range(10)]
 	arr[4][4] = '🟩'
 	arr[4][5] = '🟩'
@@ -127,11 +127,18 @@ def play(weights):
 	arr = putApple(arr)
 	head, tail = [4,7,'D'], [[4,4,'D'],[4,5,'D'],[4,6,'D'],[4,7,'D']]
 	ite, wait, score, prevScore = 0, 0, 0, 0
-	while arr != 0 and wait < (score+1)*100:
-		score = len(tail)
+	while arr != 0 and wait < (score+1)*10:
+		score = len(tail)-4 + ite/10
+
+		print('Generation:', inp)
+		print('Network:', net)
+		print(f'Time: {t}s')
+
+		print('\nBest:', max(costBatch))
 		print('Score:', score)
+
 		show(arr)
-		time.sleep(0.2)
+		time.sleep(0.1)
 		os.system('cls')
 
 		if score == prevScore:
@@ -145,4 +152,4 @@ def play(weights):
 		arr, tail = go(arr, head, tail)
 
 		prevScore = score
-	return score - 1/ite
+	return score
