@@ -1,7 +1,8 @@
-import random; random.seed(1)
+import random
 import snakeNN
 import time
 import os
+import keyboard
 from copy import deepcopy
 
 def show(arr):
@@ -104,42 +105,62 @@ def go(arr, head, tail):
 		except:
 			return 0, 0
 
-def binarize(arr, head):
+def binarize(arr, head, tail):
 	inputs = []
 	for row in range(len(arr)):
 		for col in range(len(arr[row])):
 			if arr[row][col] == '⬛':
 				inputs += [0]
-			elif [row, col] == [head[0], head[1]]:
-				inputs += [2]
+
 			elif arr[row][col] == '🟩':
-				inputs += [1]
+				inputs += [0.5]
+
 			elif arr[row][col] == '🍎':
 				inputs += [10]
+				apple = [row, col]
+	
+			elif [row, col] == [head[0], head[1]]:
+				inputs += [2]
+			
+			elif [row, col] == [tail[0][0], tail[0][1]]:
+				inputs += [1]
+
+	inputs += [abs(head[0]%10 - apple[0]) + abs(head[1]%10 - apple[1])]
+
 	return inputs
 
-def play(weights, inp, net, t, costBatch):
+def points(arr, head):
+	for row in range(len(arr)):
+		for col in range(len(arr[row])):
+			if arr[row][col] == '🍎':
+				return (10 - abs(head[0]%10-row) + 10 - abs(head[1]%10-col))/20
+
+def play(weights, inp, net, t, costBatch, disp):
 	arr = [['⬛']*10 for row in range(10)]
 	arr[4][4] = '🟩'
 	arr[4][5] = '🟩'
 	arr[4][6] = '🟩'
 	arr[4][7] = '🟩'
 	arr = putApple(arr)
-	head, tail = [4,7,'D'], [[4,4,'D'],[4,5,'D'],[4,6,'D'],[4,7,'D']]
-	ite, wait, score, prevScore = 0, 0, 0, 0
-	while arr != 0 and wait < (score+1)*10:
-		score = len(tail)-4 + ite/10
+	head, tail = [4,7,'D'], [[4,4],[4,5],[4,6],[4,7]]
+	ite, wait, score, prevScore, speed = 0, 0, 0, 0, 0
+	while arr != 0 and wait < (len(tail)-3)*10:
+		score = len(tail)-4 + points(arr, head)
 
-		print('Generation:', inp)
-		print('Network:', net)
-		print(f'Time: {t}s')
+		if disp:
+			print('Generation:', inp)
+			print('Network:', net)
+			print(f'Time: {t}s')
 
-		print('\nBest:', max(costBatch))
-		print('Score:', score)
+			print('\nBest:', max(costBatch))
+			print('Score:', score)
 
-		show(arr)
-		time.sleep(0.1)
-		os.system('cls')
+			show(arr)
+			if keyboard.is_pressed('s'):
+				speed = abs(speed-1)
+			time.sleep(speed)
+
+			os.system('cls')
 
 		if score == prevScore:
 			wait += 1
@@ -148,7 +169,7 @@ def play(weights, inp, net, t, costBatch):
 		
 		ite += 1
 		tail += [[head[0], head[1]]]
-		head[2] = snakeNN.neuralNetwork(binarize(arr, head), weights)
+		head[2] = snakeNN.neuralNetwork(binarize(arr, head, tail), weights)
 		arr, tail = go(arr, head, tail)
 
 		prevScore = score
