@@ -8,7 +8,7 @@ import snakeNN as nn
 import snakeNNgame as game
 print('Imports Sucessfull')
 
-path = 'D:\\Users\\Koral Kulacoglu\\Coding\\python\\AI\\ScienceFair21\\NeuralNetwork\\Games\\Snake\\snakeData\\'
+path = 'path\\'
 dataPath = f'{path}\\train.csv'
 
 changeAmount = 500000
