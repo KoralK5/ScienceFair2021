@@ -1,5 +1,5 @@
 import numpy as np
-import random; random.seed(1)
+import random
 from copy import deepcopy
 
 def softmax(x):
@@ -17,12 +17,14 @@ def generateWeights(layerData, inputQuantity):
 	return [np.random.rand(layerData[layerDepth], augmentedLayerData[layerDepth] + 1) - 0.5 for layerDepth in range(layerDepthLimit)]
 
 def mutate(weights, changeAmount, mutationAmount, decimal):
+	deepWeights = deepcopy(weights)
+	
 	for x in range(changeAmount):
-		l = random.randrange(0, len(weights))
-		n = random.randrange(0, len(weights[l]))
-		w = random.randrange(0, len(weights[l][n]))
-		weights[l][n][w] += random.randrange(-mutationAmount, mutationAmount) / decimal
-	return weights
+		l = random.randrange(0, len(deepWeights))
+		n = random.randrange(0, len(deepWeights[l]))
+		w = random.randrange(0, len(deepWeights[l][n]))
+		deepWeights[l][n][w] += random.randrange(-mutationAmount, mutationAmount) / decimal
+	return deepWeights
 
 def layer(inputs, weights):
 	biasedInputs = np.append(np.array(inputs), 1)
